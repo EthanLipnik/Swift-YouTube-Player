@@ -133,7 +133,7 @@ open class YouTubePlayerView: UIView, WKNavigationDelegate {
     fileprivate func buildWebView(_ parameters: [String: AnyObject]) {
         let configuration = WKWebViewConfiguration()
         configuration.allowsInlineMediaPlayback = true
-        configuration.mediaPlaybackRequiresUserAction = false
+        configuration.mediaTypesRequiringUserActionForPlayback = []
         configuration.preferences.javaScriptEnabled = true
 
         webView = WKWebView(frame: frame, configuration: configuration)
@@ -238,39 +238,14 @@ open class YouTubePlayerView: UIView, WKNavigationDelegate {
 
     fileprivate func loadWebViewWithParameters(_ parameters: YouTubePlayerParameters) {
 
-        // Get HTML from player file in bundle
-        let rawHTMLString = htmlStringWithFilePath(playerHTMLPath())!
-
         // Get JSON serialized parameters string
         let jsonParameters = serializedJSON(parameters as AnyObject)!
 
         // Replace %@ in rawHTMLString with jsonParameters string
-        let htmlString = rawHTMLString.replacingOccurrences(of: "%@", with: jsonParameters)
+        let htmlString = YTPlayerHTML.replacingOccurrences(of: "%@", with: jsonParameters)
 
         // Load HTML in web view
         webView.loadHTMLString(htmlString, baseURL: URL(string: baseURL))
-    }
-
-    fileprivate func playerHTMLPath() -> String {
-        return Bundle(for: YouTubePlayerView.self).path(forResource: "YTPlayer", ofType: "html")!
-    }
-
-    fileprivate func htmlStringWithFilePath(_ path: String) -> String? {
-
-        do {
-
-            // Get HTML string from path
-            let htmlString = try NSString(contentsOfFile: path, encoding: String.Encoding.utf8.rawValue)
-
-            return htmlString as String
-
-        } catch _ {
-
-            // Error fetching HTML
-            printLog("Lookup error: no HTML file found for path")
-
-            return nil
-        }
     }
 
 

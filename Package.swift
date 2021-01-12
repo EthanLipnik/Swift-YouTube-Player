@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Swift-YouTube-Player",
     platforms: [
-        .iOS(.v8),
+        .iOS(.v10),
     ],
     products: [
         .library(
@@ -19,9 +19,6 @@ let package = Package(
             name: "YouTubePlayer",
             dependencies: [],
             path: "YouTubePlayer/YouTubePlayer"
-            // resources: [
-            //   "YTPlayer.html"
-            // ]
         ),
         .target(
             name: "YouTubePlayerExample",
